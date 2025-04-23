@@ -1,16 +1,16 @@
 ﻿using System;
 namespace Assignment;
 
-    public class CalcMain
+    public class Calculator
     {
     public static void Main(String[] args)
     {
-        Calculator calc = new Calculator();
+        CalculatorCalc calc = new CalculatorCalc();
         calc.callCalculator();
     }
     }
 
-public class Calculator
+public class CalculatorCalc
    {
     double total;
     double num;
@@ -219,8 +219,8 @@ public class Calculator
                     Console.WriteLine("=======================================================================");
                     showOption();
                     choice = askOption();
+                    if (choice == 'g') Console.WriteLine("The Calculator is shutdown...");
                     break;
-
 
 
                 case 'g':
