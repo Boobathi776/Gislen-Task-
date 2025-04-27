@@ -11,17 +11,22 @@ namespace Assignment;
     {
         string text;
         int num;
+        bool state;
         List<int> numbers = new List<int>();
         Console.WriteLine(" Safe Number Collector");
         do
         {
-            Console.Write("Enter a Number : ");
-            int.TryParse(Console.ReadLine(), out num);
-            numbers.Add(num);
-            Console.Write("Enter 'y' if you have extra numbers to add else type 'exit' : ");
+        Doing:
+            Console.Write("Enter a Number or \"exit\" : ");
             text = Console.ReadLine();
-
-        } while (text != "exit");
+            if (text == "exit") break;
+            else state = int.TryParse(text, out num);
+            if (state)
+                numbers.Add(num);
+            else { Console.WriteLine("Enter a valid value...");
+                goto Doing;
+            }
+        } while (true);
 
         int[] arr = new int[numbers.Count];
         int i = 0;
@@ -30,10 +35,10 @@ namespace Assignment;
             arr[i] = n ;
             i++;
         }
-        Console.WriteLine(arr);
+        //Console.WriteLine(arr);
         foreach(int item in arr)
         {
-            Console.WriteLine(item);
+            Console.Write(item + " ");
         }
     }
 }
