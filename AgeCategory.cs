@@ -11,6 +11,7 @@ namespace Assignment;
     {
         Console.WriteLine("Age category checker");
         int age;
+    age:
         Console.Write("Enter your age : ");
         int.TryParse(Console.ReadLine(), out age);
         if (age > 0 && age < 122)
@@ -21,6 +22,7 @@ namespace Assignment;
         else
         {
             Console.WriteLine("I think you enter a wrong age of yours chect it");
+            goto age;
         }
     }
     }
