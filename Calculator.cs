@@ -1,15 +1,6 @@
 ﻿using System;
 namespace Assignment;
 
-    public class Calculator
-    {
-    public static void Main(String[] args)
-    {
-        CalculatorCalc calc = new CalculatorCalc();
-        calc.callCalculator();
-    }
-    }
-
 public class CalculatorCalc
    {
     double total;
