@@ -36,7 +36,92 @@ internal class SuperMarketBillingSystem
                 {12,new Product("Chips",20) }
             };
 
-    // This method is used to get the product details from the user
+
+    /*This is the starting method of the program*/
+    /// <summary>
+    /// 
+    /// </summary>
+    public void Purchasing()
+    {
+        Console.WriteLine("**************************************************************");
+        Console.WriteLine("**********      Welcome to the Super Market      *************");
+        Console.WriteLine("**************************************************************");
+
+        Console.Write("Enter user name : ");
+        string password = Console.ReadLine() ?? "user";
+        Console.WriteLine("-----------------------------------------------------------------------------------------------------------------------");
+        if (password == "admin")
+        {
+            var productDetails = GetProduct();
+            do
+            {
+                ShowProduct(productDetails);
+                UserSelectingProducts(productDetails);
+                Console.Write("Do you want to Generate bill for another client  ? (y/n) : ");
+            } while (Console.ReadLine() == "y");
+        }
+        else
+        {
+            Console.WriteLine($"Welcome {password}");
+            string need;
+            do
+            {
+                ShowProduct(definedProductDetails);
+                UserSelectingProducts(definedProductDetails);
+                Console.WriteLine("-----------------------------------------------------------------------------------------------------------------------");
+                Console.Write("Do you want to Generate bill for another client  ? (y/n) : ");
+            GetNeed:
+                need = Console.ReadLine();
+                if (need == "n") break;
+                else if (need == "y") { }
+                else { Console.Write("Enter a valid option (y/n) : "); goto GetNeed; }
+            } while (need == "y");
+            Console.WriteLine("-----------------------------------------------------------------------------------------------------------------------");
+
+        }
+
+        Console.WriteLine("Thank you for visiting the Super Market");
+        Console.WriteLine("------------------------------------------------------------------------------------------------------\n");
+
+        Console.Write("If you want to switch to another user or admin press 1 or 0 to exit : ");
+
+        if (Console.ReadLine() == "1")
+        {
+            Console.Clear();
+            Purchasing();
+        }
+        else
+        {
+            Console.WriteLine("Thank you for visiting the Super Market");
+        }
+    }
+
+
+    /// <summary>
+    /// Show the products that admin entered or the predefined set of products based on the selection
+    /// For a unique key  use the  product id as a key
+    /// </summary>
+    /// <param name="products"> sorted dictionary collection </param>
+    public void ShowProduct(SortedDictionary<decimal, Product> products)
+    {
+        Console.WriteLine("--------------------------------------------------------------");
+        Console.WriteLine("\t\tProduct List : ");
+        Console.WriteLine("--------------------------------------------------------------");
+        Console.WriteLine("\tProduct Id\tProduct Name\tProduct Price");
+        Console.WriteLine("--------------------------------------------------------------");
+        foreach (var product in products)
+        {
+            Console.WriteLine($"\t{product.Key}\t\t{product.Value.ProductName}\t\t{product.Value.ProductPrice}");
+        }
+        Console.WriteLine("--------------------------------------------------------------");
+    }
+
+
+    /// <summary>
+    /// This is method is used to get the product details from the admin panel . so we can make our own list to 
+    /// meke bills
+    /// </summary>
+    /// <returns> sorted dictioanry of products collection </returns>
     public SortedDictionary<decimal, Product> GetProduct()
     {
         string product;
@@ -80,22 +165,10 @@ internal class SuperMarketBillingSystem
         return products;
     }
 
-    // This method is used to show the products that we have in the store
-    public void ShowProduct(SortedDictionary<decimal, Product> products)
-    {
-        Console.WriteLine("--------------------------------------------------------------");
-        Console.WriteLine("\t\tProduct List : ");
-        Console.WriteLine("--------------------------------------------------------------");
-        Console.WriteLine("\tProduct Id\tProduct Name\tProduct Price");
-        Console.WriteLine("--------------------------------------------------------------");
-        foreach (var product in products)
-        {
-            Console.WriteLine($"\t{product.Key}\t\t{product.Value.ProductName}\t\t{product.Value.ProductPrice}");
-        }
-        Console.WriteLine("--------------------------------------------------------------");
-    }
-
-    // This method is used to get the input from the user "product ID" and "product price"
+    /// <summary>
+    /// Get the input for the "Product ID" and "Product price"
+    /// </summary>
+    /// <returns>product id or product price </returns>
     public decimal GetInputForProduct()
     {
         decimal number;
@@ -111,62 +184,11 @@ internal class SuperMarketBillingSystem
     }
 
 
-    //This is the Starting point of the program
-    public void Purchasing()
-    {
-        Console.WriteLine("**************************************************************");
-        Console.WriteLine("**********      Welcome to the Super Market      *************");
-        Console.WriteLine("**************************************************************");
-
-        Console.Write("Enter user name : ");
-        string password = Console.ReadLine() ?? "user";
-        Console.WriteLine("-----------------------------------------------------------------------------------------------------------------------");
-        if (password == "admin")
-        {
-            var productDetails = GetProduct();
-            do
-            {
-                ShowProduct(productDetails);
-                UserSelectingProducts(productDetails);
-                Console.Write("Do you want to Generate bill for another client  ? (y/n) : ");
-            } while (Console.ReadLine() == "y");
-        }
-        else
-        {
-            Console.WriteLine($"Welcome {password}");
-            string need;
-            do
-            {
-                ShowProduct(definedProductDetails);
-                UserSelectingProducts(definedProductDetails);
-                Console.WriteLine("-----------------------------------------------------------------------------------------------------------------------");
-                Console.Write("Do you want to Generate bill for another client  ? (y/n) : ");
-            GetNeed:
-                need = Console.ReadLine();
-                if (need == "n") break;
-                else if (need == "y") { } 
-                else { Console.Write("Enter a valid option (y/n) : "); goto GetNeed; }
-            } while (need == "y");
-            Console.WriteLine("-----------------------------------------------------------------------------------------------------------------------");
-
-        }
-
-        Console.WriteLine("Thank you for visiting the Super Market");
-        Console.WriteLine("------------------------------------------------------------------------------------------------------\n");
-
-        Console.Write("If you want to switch to another user or admin press 1 or 0 to exit : ");
-
-        if (Console.ReadLine() == "1")
-        {
-            Console.Clear();
-            Purchasing();
-        }
-        else
-        {
-            Console.WriteLine("Thank you for visiting the Super Market");
-        }
-    }
-
+    /// <summary>
+    /// The user select the product by giving product id and quantity for that particular product.
+    /// This product is added in the separate dicitonary to generate bill.
+    /// </summary>
+    /// <param name="productDetails">sortedDicitionary collection for selected products </param>
     public void UserSelectingProducts(SortedDictionary<decimal, Product> productDetails)
     {
         decimal productId = 0;
@@ -219,7 +241,7 @@ internal class SuperMarketBillingSystem
         selectedProduct.Clear();
     }
 
-
+    //Get the product Id from the user for select a particular product
     public int GetProductId()
     {
         //Console.Write("Enter the product ID : ");
@@ -233,6 +255,10 @@ internal class SuperMarketBillingSystem
         }
     }
 
+    /// <summary>
+    /// Generate a bill based on the selected product dictionary 
+    /// </summary>
+    /// <param name="selectedProduct"></param>
     public void GenerateBill(Dictionary<string, decimal[]> selectedProduct)
 
     {
@@ -274,6 +300,10 @@ internal class SuperMarketBillingSystem
         }
     }
 
+    /// <summary>
+    /// If the user want to edit the bill 
+    /// </summary>
+    /// <param name="selectedProduct"></param>
     public void ModifyBill(Dictionary<string, decimal[]> selectedProduct)
     {
         int option;
@@ -340,3 +370,4 @@ internal class SuperMarketBillingSystem
         } while (option != 0);
     }
 }
+
