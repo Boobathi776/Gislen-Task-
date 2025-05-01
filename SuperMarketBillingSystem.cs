@@ -133,13 +133,19 @@ internal class SuperMarketBillingSystem
         else
         {
             Console.WriteLine($"Welcome {password}");
+            string need;
             do
             {
                 ShowProduct(definedProductDetails);
                 UserSelectingProducts(definedProductDetails);
                 Console.WriteLine("-----------------------------------------------------------------------------------------------------------------------");
                 Console.Write("Do you want to Generate bill for another client  ? (y/n) : ");
-            } while (Console.ReadLine() == "y");
+            GetNeed:
+                need = Console.ReadLine();
+                if (need == "n") break;
+                else if (need == "y") { } 
+                else { Console.Write("Enter a valid option (y/n) : "); goto GetNeed; }
+            } while (need == "y");
             Console.WriteLine("-----------------------------------------------------------------------------------------------------------------------");
 
         }
@@ -276,7 +282,7 @@ internal class SuperMarketBillingSystem
             Console.WriteLine("Choose the option:\n1.Remove product\n2.Add product\n3.Modify quantity\n4.Proceed to Bill\n0.Exit");
             Console.WriteLine("-----------------------------------------------------------------------------------------------------------------------");
             Console.Write("Enter your choice : ");
-
+        GetChoice:
             int.TryParse(Console.ReadLine(), out option);
             if (option == 1)
             {
@@ -323,10 +329,11 @@ internal class SuperMarketBillingSystem
                 Console.WriteLine("Proceeding to Bill......");
                 GenerateBill(selectedProduct);
             }
+            else if (option == 0) break;
             else
             {
-                Console.WriteLine("Exiting the editing operation.... so the operation is cancel.");
-                Console.WriteLine("------------------------------------------------------------------------------");
+                Console.Write("Enter a valid choice : ");
+                goto GetChoice;
                 //GenerateBill(selectedProduct);
             }
         } while (option != 0);
