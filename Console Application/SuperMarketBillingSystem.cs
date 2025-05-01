@@ -1,5 +1,6 @@
 ﻿namespace Assignment;
 
+//This class holds the product details
 internal class Product
 {
     private string _productName;
@@ -43,7 +44,7 @@ internal class SuperMarketBillingSystem
         decimal productId;
         do
         {
-            Console.Write("Enter the product Id or Enter 0 to quit : ");
+            Console.Write("Enter the product Id or Enter 0 to stop Adding: ");
             productId = GetInputForProduct();
             if (productId != 0)
             {
