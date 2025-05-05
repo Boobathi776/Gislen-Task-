@@ -1,6 +1,5 @@
 ﻿
 namespace Tasks.ConsoleApplication;
-
  class Employee
 {
     public int EmployeeId { get; set; }
@@ -109,22 +108,29 @@ internal class EmployeeManagementSystem
                 Console.WriteLine("\n--------------------------------------------------------------------------------------------\n");
                 Console.WriteLine("Creating a new Permanent Employee...");
                 int employeeId = GetEmployeeId();
-                string employeeName = GetEmployeeName();
+            CheckAgain1:
+                if (permanetEmployees.Any(employee => employee.EmployeeId == employeeId))
+                {
+                    Console.Write("Employee ID already exists. Please enter a unique Employee ID....");
+                    employeeId = GetEmployeeId();
+                    goto CheckAgain1;
+                }
+                else if(contractEmployees.Any(employee => employee.EmployeeId == employeeId))
+                {
+                    Console.Write("Employee ID already exists. Please enter a unique Employee ID....");
+                    employeeId = GetEmployeeId();
+                    goto CheckAgain1;
+                }
+                    string employeeName = GetEmployeeName();
                 string employeeDepartment = GetEmployeeDepartment();
                 decimal employeeSalary = GetEmployeeSalary();
                 DateOnly joiningDate = GetJoiningDate();
                 bool hasInsuranceCoverage = HasInsuranceCoverage();
                 int leaveEncashmentBalance = LeaveEncashmentBalance();
                 PermanentEmployee newPermanentEmployee = new PermanentEmployee(employeeId, employeeName, employeeDepartment, employeeSalary, joiningDate, hasInsuranceCoverage, leaveEncashmentBalance);
-                if (permanetEmployees.Any(employee => employee.EmployeeId == employeeId) && contractEmployees.Any(employee => employee.EmployeeId == employeeId))
-                {
-                    Console.Write("Employee ID already exists. Please enter a unique Employee ID....");
-                    employeeId = GetEmployeeId();
-                }
-                else
-                {
-                    permanetEmployees.Add(newPermanentEmployee);
-                }
+
+                permanetEmployees.Add(newPermanentEmployee);
+
                 Console.WriteLine("\n--------------------------------------------------------------------------------------------\n");
                 ShowEmployees();
             }
@@ -133,21 +139,26 @@ internal class EmployeeManagementSystem
                 Console.WriteLine("\n--------------------------------------------------------------------------------------------\n");
                 Console.WriteLine("Creating a new Contract Employee...");
                 int employeeId = GetEmployeeId();
+            CheckAgain:
+                if (contractEmployees.Any(employee => employee.EmployeeId == employeeId) )
+                {
+                    Console.Write("Employee ID already exists. Please enter a unique Employee ID....");
+                    employeeId = GetEmployeeId();
+                    goto CheckAgain;
+                }
+                else if (permanetEmployees.Any(employee => employee.EmployeeId == employeeId))
+                {
+                    Console.Write("Employee ID already exists. Please enter a unique Employee ID....");
+                    employeeId = GetEmployeeId();
+                    goto CheckAgain;
+                }
                 string employeeName = GetEmployeeName();
                 string employeeDepartment = GetEmployeeDepartment();
                 decimal employeeSalary = GetEmployeeSalary();
                 int contractDuration = GetContractDuration();
                 bool isRemote = GetIsRemote();
                 ContractEmployee contractEmployee = new ContractEmployee(employeeId, employeeName, employeeDepartment, employeeSalary, contractDuration, isRemote);
-                if (permanetEmployees.Any(employee => employee.EmployeeId == employeeId) && contractEmployees.Any(employee => employee.EmployeeId == employeeId))
-                {
-                    Console.Write("Employee ID already exists. Please enter a unique Employee ID....");
-                    employeeId = GetEmployeeId();
-                }
-                else
-                {
-                    contractEmployees.Add(contractEmployee);
-                }
+                contractEmployees.Add(contractEmployee);
                 Console.WriteLine("\n--------------------------------------------------------------------------------------------\n");
                 ShowEmployees();
             }
@@ -163,11 +174,10 @@ internal class EmployeeManagementSystem
                     permanetEmployees.Remove(employeeToRemove);
                     Console.WriteLine($"Employee with ID {employeeId} removed from the list.");
                     Console.WriteLine("\n--------------------------------------------------------------------------------------------\n");
-
                 }
                 else
                 {
-                   ContractEmployee employeeToRemove2 = contractEmployees.FirstOrDefault(employee => employee.EmployeeId == employeeId);
+                    ContractEmployee employeeToRemove2 = contractEmployees.FirstOrDefault(employee => employee.EmployeeId == employeeId);
                     if (employeeToRemove2 != null)
                     {
                         contractEmployees.Remove(employeeToRemove2);
@@ -201,28 +211,28 @@ internal class EmployeeManagementSystem
 
     private int GetOption()
     {
-        Console.WriteLine("Enter your choice (1-4):");
+        Console.Write("Enter your choice (1-4):");
         int option;
         while (!int.TryParse(Console.ReadLine(), out option) || option < 1 || option > 4)
         {
-            Console.WriteLine("Invalid input. Please enter a number between 1 and 4 : ");
+            Console.Write("Invalid input. Please enter a number between 1 and 4 : ");
         }
         return option;
     }
     private int GetEmployeeId()
     {
-        Console.WriteLine("Enter Employee ID:");
+        Console.Write("Enter Employee ID:");
         int empId;
         while (!int.TryParse(Console.ReadLine(), out empId))
         {
-            Console.WriteLine("Invalid input. Please enter a valid Employee ID.");
+            Console.Write("Invalid input. Please enter a valid Employee ID.");
         }
         return empId;
     }
 
     private string GetEmployeeName()
     {
-        Console.WriteLine("Enter Employee Name:");
+        Console.Write("Enter Employee Name:");
         string name = Console.ReadLine();
         if(!int.TryParse(name , out int result))
         {
@@ -234,11 +244,18 @@ internal class EmployeeManagementSystem
 
     private string GetEmployeeDepartment()
     {
-        Console.WriteLine("Enter Employee Department:");
-        string department = Console.ReadLine();
+        Console.WriteLine("\n--------------------------------------------------------------------------------------------\n");
+        Console.WriteLine("Available Departments:");
+        Console.WriteLine("* Finance\n* HR\n* IT\n* Testing");
+        List<string> departments = new List<string>() { "finance", "hr", "it", "testing" };
+        Console.Write("Enter Employee Department:");
+        string department = Console.ReadLine().ToLower();
         if (!int.TryParse(department, out int result))
         {
-            return department;
+            if (departments.Contains(department))
+            {
+                return department;
+            }
         }
         Console.Write("Please enter a valid Employee Department : ");
         return GetEmployeeDepartment();
@@ -246,7 +263,7 @@ internal class EmployeeManagementSystem
 
     private decimal GetEmployeeSalary()
     {
-        Console.WriteLine("Enter Employee Salary:");
+        Console.Write("Enter Employee Salary:");
         decimal salary;
         while (!decimal.TryParse(Console.ReadLine(), out salary))
         {
@@ -257,7 +274,7 @@ internal class EmployeeManagementSystem
 
     private DateOnly GetJoiningDate()
     {
-        Console.WriteLine("Enter Joining Date (yyyy-mm-dd):");
+        Console.Write("Enter Joining Date (yyyy-mm-dd):");
         DateOnly joiningDate;
         while (!DateOnly.TryParse(Console.ReadLine(), out joiningDate))
         {
@@ -268,18 +285,26 @@ internal class EmployeeManagementSystem
 
     private bool HasInsuranceCoverage()
     {
-        Console.WriteLine("Does the employee have insurance coverage? (true/false):");
-        bool hasInsuranceCoverage;
-        while (!bool.TryParse(Console.ReadLine(), out hasInsuranceCoverage))
+        Console.Write("Does the employee have insurance coverage? (y/n):");
+        string hasInsuranceCoverage=Console.ReadLine().ToLower().Trim();
+        if (hasInsuranceCoverage == "y")
         {
-            Console.Write("Please enter a valid response (true/false): ");
+            return true;
         }
-        return hasInsuranceCoverage;
+        else if (hasInsuranceCoverage == "n")
+        {
+            return false;
+        }
+        else
+        {
+            Console.Write("Please enter a valid response (y/n): ");
+            return HasInsuranceCoverage();
+        }
     }
 
     private int LeaveEncashmentBalance()
     {
-        Console.WriteLine("Enter Leave Encashment Balance:");
+        Console.Write("Enter Leave Encashment Balance:");
         int leaveEncashmentBalance;
         while (!int.TryParse(Console.ReadLine(), out leaveEncashmentBalance))
         {
@@ -290,7 +315,7 @@ internal class EmployeeManagementSystem
 
     private int GetContractDuration()
     {
-        Console.WriteLine("Enter Contract Duration (in months):");
+        Console.Write("Enter Contract Duration (in months):");
         int contractDuration;
         while (!int.TryParse(Console.ReadLine(), out contractDuration))
         {
@@ -302,13 +327,22 @@ internal class EmployeeManagementSystem
 
     private bool GetIsRemote()
     {
-        Console.WriteLine("Is the employee working remotely? (true/false):");
-        bool isRemote;
-        while (!bool.TryParse(Console.ReadLine(), out isRemote))
+        Console.Write("Is the employee working remotely? (y/n):");
+        string isRemote = Console.ReadLine().ToLower().Trim();
+        if(isRemote == "y")
+        {
+            return true;
+        }
+        else if (isRemote == "n")
+        {
+            return false;
+        }
+        else
         {
             Console.Write("Please enter a valid response (true/false): ");
+            return GetIsRemote();
         }
-        return isRemote;
+        
     }
 
 
