@@ -9,17 +9,27 @@ public class Student
 {
     public int Id { get; set; }
     public string Name { get; set; }
-
+    public virtual void DisplayStudentDetails()
+    {
+        Console.WriteLine($"Student: {Id}, {Name}");
+    }
 }
  public class RegularStudent : Student
 {
     public string Grade { get; set; }
-
+    public override void DisplayStudentDetails()
+    {
+        Console.WriteLine($"Regular Student: {Id}, {Name}, {Grade}");
+    }
 }
 
 public class  ExchangeStudent : Student
 {
     public string Grade { get; set; }
+    public override void DisplayStudentDetails()
+    {
+        Console.WriteLine($"Exchange Student: {Id}, {Name}, {Grade}");
+    }
 }
 public  class StudentManagementSystem 
 {
@@ -40,11 +50,11 @@ public  class StudentManagementSystem
         {
             if (student1 is RegularStudent regularStudent)
             {
-                Console.WriteLine($"Regular Student: {regularStudent.Id}, {regularStudent.Name}, {regularStudent.Grade}");
+                student1.DisplayStudentDetails();
             }
             else if (student1 is ExchangeStudent exchangeStudent)
             {
-                Console.WriteLine($"Exchange Student: {exchangeStudent.Id}, {exchangeStudent.Name}, {exchangeStudent.Grade}");
+                student1.DisplayStudentDetails();
             }
         }
 
@@ -67,11 +77,11 @@ public  class StudentManagementSystem
         {
             if (student1 is RegularStudent regularStudent)
             {
-                Console.WriteLine($"Regular Student: {regularStudent.Id}, {regularStudent.Name}, {regularStudent.Grade}");
+                student1.DisplayStudentDetails();
             }
             else if (student1 is ExchangeStudent exchangeStudent)
             {
-                Console.WriteLine($"Exchange Student: {exchangeStudent.Id}, {exchangeStudent.Name}, {exchangeStudent.Grade}");
+                student1.DisplayStudentDetails();
             }
         }
     }
