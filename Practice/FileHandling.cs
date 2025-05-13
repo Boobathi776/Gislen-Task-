@@ -54,13 +54,13 @@ internal class FileHandling
 
     public void LogFile(Exception e)
     {
-        using (StreamWriter writer = new StreamWriter($@"D:\Workspace\File handling practice\Log{DateTime.Now.ToString("dd-MM-yyyy hh-mm")}.txt", true))
+        using (StreamWriter writer = new StreamWriter($@"D:\Workspace\File handling practice\Error_Log_{DateTime.Now.ToString("dd-MM-yyyy")}.txt", true))
         {
-            writer.WriteLine("=======================================================");
+            writer.WriteLine("========================================================");
             writer.WriteLine("Source: " + e.Source);
             writer.WriteLine("Message : " + e.Message);
             writer.WriteLine("StackTrace: \n" + e.StackTrace +"\n");
-            writer.WriteLine("Date: " + DateTime.Now.ToString("dd-mm-yyyy hh-MM-ss"));
+            writer.WriteLine("Date: " + DateTime.Now.ToString("dd-MM-yyyy hh-mm-ss"));
             writer.WriteLine("=======================================================");
         }
     }

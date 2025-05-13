@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Assignment.Practice;
 
-StoringRemoving storingRemoving = new StoringRemoving();
-storingRemoving.StoreData();
-storingRemoving.RetrieveData();
+//StoringRemoving storingRemoving = new StoringRemoving();
+//storingRemoving.StoreData();
+//storingRemoving.RetrieveData();
 namespace Assignment.Practice
 {
     internal class StoringRemoving
